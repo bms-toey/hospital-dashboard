@@ -881,36 +881,24 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
    DATA SOURCE — ใช้ Apps Script Web App endpoint
    ไม่มีปัญหา CORS เลย ทำงานได้จากทุกที่
 ══════════════════════════════════════════════ */
-// ── Apps Script Web App ──
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwcsSaXdCSGfakxxkYWgfKvyVCAkajNCVuJDl9iN60cNmTU5m_547N4yXgxEooshf2SsQ/exec';
+// ── Direct CSV fetch — เร็วที่สุด ใช้ได้บน https:// (GitHub Pages) ──
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVJCZ1TNDrzeWHb9bijFsUMKrL1rvSlHP46IC0tI6LmL9tRj77X1U2RaMEYh-itjQOcz782KN_bk-_/pub?output=csv';
 
 async function fetchCSV() {
-  // Apps Script ส่ง redirect ไปที่ URL จริง — ต้องใช้ mode: 'no-cors' จะไม่ได้
-  // แต่ถ้าเปิดจาก file:// browser จะบล็อก fetch ทั้งหมด
-  // วิธีแก้: ใช้ script tag injection แทน (JSONP-style)
-  return new Promise((resolve, reject) => {
-    const cb = '__gasCb' + Date.now();
-    const url = GAS_URL + '?callback=' + cb + '&_=' + Date.now();
+  const res = await fetch(CSV_URL + '&_=' + Date.now());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const txt = await res.text();
+  if (!txt || txt.length < 10) throw new Error('ข้อมูลว่าง');
+  return parseCsvToRows(txt);
+}
 
-    const timer = setTimeout(() => {
-      delete window[cb]; if(el) el.remove();
-      reject(new Error('timeout — กรุณาตรวจสอบ Apps Script URL'));
-    }, 15000);
-
-    window[cb] = function(data) {
-      clearTimeout(timer);
-      delete window[cb];
-      if(el) el.remove();
-      if (data && data.error) reject(new Error(data.error));
-      else if (data && data.headers) resolve(data);
-      else reject(new Error('รูปแบบข้อมูลผิด'));
-    };
-
-    const el = document.createElement('script');
-    el.src = url;
-    el.onerror = () => { clearTimeout(timer); delete window[cb]; el.remove(); reject(new Error('โหลด script ไม่ได้')); };
-    document.head.appendChild(el);
-  });
+function parseCsvToRows(txt) {
+  const lines = txt.trim().split('\n');
+  const hdrs  = splitL(lines[0]);
+  const rows  = lines.slice(1)
+    .map(l => { const v = splitL(l); return Object.fromEntries(hdrs.map((h,i) => [h, v[i] ?? ''])); })
+    .filter(r => Object.values(r).some(v => String(v).trim() !== ''));
+  return { headers: hdrs, rows };
 }
 
 const MONTHS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
@@ -928,10 +916,8 @@ let sortC='',sortA=true;
 async function fetchNow(){
   setSb('โหลด...','load');
   try{
-    const json = await fetchCSV();
-    // GAS returns { headers: [...], rows: [{col:val,...}] }
-    const cols = json.headers;
-    const norm = json.rows.map(row => {
+    const { headers: cols, rows } = await fetchCSV();
+    const norm = rows.map(row => {
       const o = {};
       cols.forEach(h => {
         const key = h.trim().toLowerCase().replace(/\s+/g,'_');
@@ -943,7 +929,7 @@ async function fetchNow(){
     allRows = norm;
     populateFilters();
     applyFilters(prev);
-    setSb(`${allRows.length} แถว · อัปเดต ${new Date().toLocaleTimeString('th-TH')}`,'live');
+    setSb(`${allRows.length} แถว · ${new Date().toLocaleTimeString('th-TH')}`,'live');
     document.getElementById('updT').textContent = new Date().toLocaleTimeString('th-TH');
     document.getElementById('rowInfo').textContent = `${filtRows.length.toLocaleString()} รายการ`;
     document.getElementById('ftRows').textContent = allRows.length.toLocaleString();
