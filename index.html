@@ -599,7 +599,7 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
       <span class="icon">📋</span> ข้อมูลดิบ
     </a>
     <a class="sb-item" onclick="showTab('transparency')">
-      <span class="icon">🛡️</span> ความโปร่งใส
+      <span class="icon">🛡️</span> บริหารความเสี่ยง
     </a>
   </div>
 
@@ -907,64 +907,37 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
 
       <!-- KPI Row -->
       <div class="kpi-section">
-        <div class="section-hdr"><div class="section-label">🛡️ ตัวชี้วัดความโปร่งใสและป้องกันทุจริต</div><div class="section-line"></div></div>
-        <div class="kpi-grid5" id="kpiTransp"></div>
+        <div class="section-hdr"><div class="section-label">🛡️ ตัวชี้วัดบริหารความเสี่ยงการจัดซื้อจัดจ้าง</div><div class="section-line"></div></div>
+        <div class="kpi-grid4" id="kpiTransp"></div>
       </div>
 
-      <!-- Red Flags -->
-      <div class="panel" style="margin-bottom:14px;border-color:rgba(240,80,110,.3);box-shadow:0 0 20px rgba(240,80,110,.08);">
-        <div class="ph">
-          <div class="pt">🚨 Red Flag Alert <span>ราคาซื้อจริงสูงกว่าราคากลาง &gt;20%</span></div>
-          <span class="ptag" style="background:rgba(240,80,110,.1);border-color:rgba(240,80,110,.3);color:var(--rose)">PRICE ANOMALY</span>
-        </div>
-        <div class="dtbl-wrap">
-          <table class="dtbl">
-            <thead><tr>
-              <th>สถานะ</th><th>วัสดุ/ยา</th><th>โรงพยาบาล</th>
-              <th>ราคาซื้อ/หน่วย</th><th>ราคากลาง/หน่วย</th><th>มูลค่า PO</th>
-            </tr></thead>
-            <tbody id="redFlagBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Savings + Vendor concentration -->
+      <!-- Vendor Risk -->
+      <div class="section-hdr" style="margin-bottom:10px;"><div class="section-label">🏦 Vendor Risk — ความเสี่ยงจากโครงสร้างการซื้อ</div><div class="section-line"></div></div>
       <div class="grid-2" style="margin-bottom:14px;">
         <div class="panel">
-          <div class="ph"><div class="pt">💡 ศักยภาพประหยัดงบ <span>ถ้าซื้อที่ราคากลาง (Joint Proc.)</span></div><span class="ptag green">SAVINGS</span></div>
-          <div class="ch ch-240"><canvas id="cSavings"></canvas></div>
+          <div class="ph"><div class="pt">🔒 Vendor Lock-in <span>สัดส่วนผู้จำหน่ายรายใหญ่สุดต่อโรงพยาบาล</span></div><span class="ptag" style="background:rgba(240,80,110,.1);border-color:rgba(240,80,110,.3);color:var(--rose)">PER HOSPITAL</span></div>
+          <div id="vendorLockT" style="padding-top:4px;"></div>
         </div>
         <div class="panel">
-          <div class="ph"><div class="pt">⚖️ ความเข้มข้นผู้จำหน่าย <span>ความเสี่ยงการผูกขาด</span></div><span class="ptag">CONCENTRATION</span></div>
+          <div class="ph"><div class="pt">⚖️ ความเข้มข้นผู้จำหน่าย <span>สัดส่วนมูลค่าทั้งระบบ</span></div><span class="ptag">CONCENTRATION</span></div>
           <div id="vendorConcT" style="padding-top:4px;"></div>
         </div>
       </div>
-
-      <!-- Hospital Data Integrity + SOD -->
       <div class="panel" style="margin-bottom:14px;">
-        <div class="ph"><div class="pt">🏥 ประเมินความครบถ้วนข้อมูล <span>Segregation of Duties & Data Integrity</span></div><span class="ptag blue">PER HOSPITAL</span></div>
-        <div class="dtbl-wrap">
-          <table class="dtbl">
-            <thead><tr>
-              <th>โรงพยาบาล</th><th>มูลค่า PO</th>
-              <th style="text-align:center">ประเภทวัสดุ</th><th style="text-align:center">คลังสินค้า</th>
-              <th style="text-align:center">ผู้จำหน่าย</th><th style="text-align:center">จำนวน PO</th>
-              <th style="text-align:center">Red Flags</th><th style="text-align:center">สถานะ</th>
-            </tr></thead>
-            <tbody id="sodBody"></tbody>
-          </table>
-        </div>
+        <div class="ph"><div class="pt">⚠️ Single Source Procurement <span>ประเภทวัสดุที่มีผู้จำหน่ายรายเดียวทั้งระบบ</span></div><span class="ptag" style="background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:var(--gold2)">MONOPOLY RISK</span></div>
+        <div id="singleSourceT"></div>
       </div>
 
-      <!-- Perfect Order + SUM -->
+      <!-- Spending Pattern -->
+      <div class="section-hdr" style="margin-bottom:10px;"><div class="section-label">📅 Spending Pattern — ความผิดปกติของรูปแบบการซื้อ</div><div class="section-line"></div></div>
       <div class="grid-2">
         <div class="panel">
-          <div class="ph"><div class="pt">✅ Perfect Order KPI <span>ความสมบูรณ์คำสั่งซื้อ Procure-to-Pay</span></div></div>
-          <div id="perfectOrderDetail"></div>
+          <div class="ph"><div class="pt">📈 Late-Year Budget Surge <span>มูลค่า Q4 เทียบค่าเฉลี่ย Q1–Q3</span></div><span class="ptag" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.3);color:var(--sky)">END-OF-YEAR</span></div>
+          <div class="dtbl-wrap" id="lateYearT"></div>
         </div>
         <div class="panel">
-          <div class="ph"><div class="pt">📊 Spend Under Management <span>ยอดจ่ายที่ตรวจสอบได้</span></div></div>
-          <div id="sumDetail"></div>
+          <div class="ph"><div class="pt">⚡ Monthly Spending Pattern <span>เดือนที่มียอดผิดปกติ (>2 SD) แสดงสีแดง</span></div><span class="ptag">SPIKE DETECT</span></div>
+          <div class="ch ch-240"><canvas id="cSpendPattern"></canvas></div>
         </div>
       </div>
 
@@ -1144,7 +1117,7 @@ function showTab(id){
   document.getElementById('tab-'+id).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   event.currentTarget.classList.add('active');
-  const titles={overview:'ภาพรวมประเทศ',monthly:'รายเดือน',quarterly:'รายไตรมาส',annual:'รายปี',deepdive:'วิเคราะห์เชิงลึก',ranking:'จัดอันดับ',data:'ข้อมูลดิบ',transparency:'ความโปร่งใสและป้องกันทุจริต'};
+  const titles={overview:'ภาพรวมประเทศ',monthly:'รายเดือน',quarterly:'รายไตรมาส',annual:'รายปี',deepdive:'วิเคราะห์เชิงลึก',ranking:'จัดอันดับ',data:'ข้อมูลดิบ',transparency:'บริหารความเสี่ยง'};
   const subs={overview:'National Procurement Overview',monthly:'Monthly Analysis',quarterly:'Quarterly Analysis',annual:'Annual Summary',deepdive:'Deep Dive Analytics',ranking:'Performance Ranking',data:'Raw Data Explorer',transparency:'Procurement Transparency & Anti-Corruption Dashboard'};
   document.getElementById('pageTitle').textContent=titles[id]||id;
   document.getElementById('pageSub').textContent=subs[id]||'';
@@ -1562,160 +1535,150 @@ function exportCSV(){
 /* ══════════════════ TRANSPARENCY ══════════════════ */
 function renderTransparency(){
   const R=filtRows;
-  if(!R.length){['kpiTransp','redFlagBody','vendorConcT','sodBody','perfectOrderDetail','sumDetail'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div style="padding:20px;color:var(--txt3);text-align:center">ไม่มีข้อมูล</div>';});return;}
+  const noData='<div style="padding:20px;color:var(--txt3);text-align:center">ไม่มีข้อมูล</div>';
+  if(!R.length){['kpiTransp','vendorLockT','vendorConcT','singleSourceT','lateYearT'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=noData;});return;}
 
-  // ── Median unit price per item ──
-  const itemGroups={};
+  // ── helper: monthly value sum for a set of rows ──
+  const mVal=(rows,mi)=>rows.reduce((s,r)=>s+n(r['total_month_'+(mi+1)]),0);
+
+  // ══════════════════════════════════
+  // VENDOR RISK
+  // ══════════════════════════════════
+
+  // Per-hospital vendor breakdown
+  const hospVend={};
   R.forEach(r=>{
-    const qty=n(r.po_qty_total),val=n(r.po_total_total);
-    if(qty>0&&val>0){
-      if(!itemGroups[r.item_name])itemGroups[r.item_name]=[];
-      itemGroups[r.item_name].push({hosp:r.hospitalname,up:val/qty,val,qty});
+    const h=r.hospitalname,v=r.stock_vendor_name,val=n(r.po_total_total);
+    if(!h||!v||!val)return;
+    if(!hospVend[h])hospVend[h]={total:0,vends:{}};
+    hospVend[h].total+=val;
+    hospVend[h].vends[v]=(hospVend[h].vends[v]||0)+val;
+  });
+  const lockInData=Object.entries(hospVend).map(([h,d])=>{
+    const sorted=Object.entries(d.vends).sort((a,b)=>b[1]-a[1]);
+    const topV=sorted[0];
+    const topShare=topV?topV[1]/d.total*100:0;
+    return{h,topV:topV?topV[0]:'—',topShare,total:d.total,numV:sorted.length};
+  }).sort((a,b)=>b.topShare-a.topShare);
+  const lockInCount=lockInData.filter(d=>d.topShare>60).length;
+
+  // Single source: item_type_name with only 1 vendor across all filtered rows
+  const typeVend={};
+  R.forEach(r=>{
+    if(!r.item_type_name||!r.stock_vendor_name)return;
+    if(!typeVend[r.item_type_name])typeVend[r.item_type_name]=new Set();
+    typeVend[r.item_type_name].add(r.stock_vendor_name);
+  });
+  const singleSource=Object.entries(typeVend)
+    .filter(([,s])=>s.size===1)
+    .map(([t,s])=>{
+      const vName=[...s][0];
+      const val=R.filter(r=>r.item_type_name===t).reduce((a,r)=>a+n(r.po_total_total),0);
+      return{t,vName,val};
+    }).sort((a,b)=>b.val-a.val);
+
+  // Global vendor concentration
+  const vendG=groupBy('stock_vendor_name',r=>n(r.po_total_total));
+  const totVal=R.reduce((s,r)=>s+n(r.po_total_total),0)||1;
+  const topShare=vendG.length>0?vendG[0][1]/totVal*100:0;
+
+  // ══════════════════════════════════
+  // SPENDING PATTERN
+  // ══════════════════════════════════
+
+  // Fiscal quarters: Q1=ต.ค.-ธ.ค.(idx 9,10,11) Q2=ม.ค.-มี.ค.(0,1,2) Q3=เม.ย.-มิ.ย.(3,4,5) Q4=ก.ค.-ก.ย.(6,7,8)
+  const QM=[[9,10,11],[0,1,2],[3,4,5],[6,7,8]];
+  const hospNames=[...new Set(R.map(r=>r.hospitalname).filter(Boolean))];
+  const lateYearData=hospNames.map(h=>{
+    const hR=R.filter(r=>r.hospitalname===h);
+    const qTots=QM.map(mi=>mi.reduce((s,m)=>s+mVal(hR,m),0));
+    const q4=qTots[3];
+    const avgQ123=(qTots[0]+qTots[1]+qTots[2])/3||0;
+    const ratio=avgQ123>0?q4/avgQ123:0;
+    const total=qTots.reduce((s,v)=>s+v,0);
+    return{h,qTots,q4,avgQ123,ratio,total};
+  }).filter(d=>d.total>0).sort((a,b)=>b.ratio-a.ratio);
+  const surgeCount=lateYearData.filter(d=>d.ratio>2).length;
+
+  // Monthly totals (calendar index 0–11) + spike detection
+  const mTots=Array.from({length:12},(_,i)=>mVal(R,i));
+  const mMean=mTots.reduce((s,v)=>s+v,0)/12||0;
+  const mSD=Math.sqrt(mTots.reduce((s,v)=>s+(v-mMean)**2,0)/12)||1;
+  const spikeCount=mTots.filter(v=>(v-mMean)/mSD>2).length;
+
+  // ── KPI Cards ──
+  document.getElementById('kpiTransp').innerHTML=`
+    <div class="kcard" style="--kc:var(--rose)"><div class="kcard-icon">🔒</div><div class="kcard-label">Vendor Lock-in</div><div class="kcard-val">${lockInCount}</div><div class="kcard-sub">รพ. ที่พึ่งผู้ขายรายเดียว >60%</div></div>
+    <div class="kcard" style="--kc:var(--amber)"><div class="kcard-icon">⚠️</div><div class="kcard-label">Single Source</div><div class="kcard-val">${singleSource.length}</div><div class="kcard-sub">ประเภทวัสดุที่มีผู้ขายรายเดียว</div></div>
+    <div class="kcard" style="--kc:var(--sky)"><div class="kcard-icon">📈</div><div class="kcard-label">Late-Year Surge</div><div class="kcard-val">${surgeCount}</div><div class="kcard-sub">รพ. ที่ Q4 สูงกว่าค่าเฉลี่ย >2x</div></div>
+    <div class="kcard" style="--kc:var(--lavender)"><div class="kcard-icon">⚡</div><div class="kcard-label">Spending Spike</div><div class="kcard-val">${spikeCount}</div><div class="kcard-sub">เดือนที่มียอดผิดปกติ (>2 SD)</div></div>`;
+
+  // ── Vendor Lock-in per Hospital ──
+  document.getElementById('vendorLockT').innerHTML=lockInData.length?lockInData.slice(0,12).map(d=>{
+    const rc=d.topShare>60?'var(--rose)':d.topShare>40?'var(--amber)':'var(--emerald)';
+    const ic=d.topShare>60?'🔴':d.topShare>40?'🟡':'🟢';
+    return`<div class="var-row">
+      <div class="var-name" title="${d.h}">${d.h.length>20?d.h.slice(0,18)+'…':d.h}</div>
+      <div style="font-size:.67rem;color:var(--txt3);min-width:80px;text-align:right;padding-right:6px">${d.topV.length>16?d.topV.slice(0,14)+'…':d.topV}</div>
+      <div class="var-pct" style="background:rgba(0,0,0,.2);color:${rc}">${ic} ${d.topShare.toFixed(0)}%</div>
+      <div class="var-bar-wrap"><div class="var-bar" style="width:${Math.min(d.topShare,100).toFixed(1)}%;background:${rc}"></div></div>
+    </div>`;
+  }).join(''):noData;
+
+  // ── Global Vendor Concentration ──
+  const vTot=vendG.reduce((s,[,v])=>s+v,0)||1;
+  document.getElementById('vendorConcT').innerHTML=vendG.slice(0,8).map(([k,v])=>{
+    const sh=v/vTot*100;const rc=sh>30?'var(--rose)':sh>15?'var(--amber)':'var(--emerald)';
+    return`<div class="var-row"><div class="var-name">${k.length>24?k.slice(0,22)+'…':k}</div><div class="var-val">฿${fmtB(v)}</div><div class="var-pct" style="background:rgba(0,0,0,.2);color:${rc}">${sh.toFixed(1)}%</div><div class="var-bar-wrap"><div class="var-bar" style="width:${Math.min(sh,100).toFixed(1)}%;background:${rc}"></div></div></div>`;
+  }).join('');
+
+  // ── Single Source Table ──
+  document.getElementById('singleSourceT').innerHTML=singleSource.length?`
+    <table class="dtbl"><thead><tr>
+      <th>ประเภทวัสดุ</th><th>ผู้จำหน่ายรายเดียว</th><th style="text-align:right">มูลค่า PO</th><th style="text-align:center">ความเสี่ยง</th>
+    </tr></thead><tbody>${singleSource.slice(0,15).map(s=>`
+      <tr>
+        <td>${s.t}</td>
+        <td style="color:var(--amber)">${s.vName.length>32?s.vName.slice(0,30)+'…':s.vName}</td>
+        <td class="tn" style="text-align:right">฿${fmtB(s.val)}</td>
+        <td style="text-align:center"><span style="color:var(--amber);font-size:.72rem;font-weight:700">⚠️ Single Source</span></td>
+      </tr>`).join('')}</tbody></table>`:
+    '<div style="padding:20px;color:var(--emerald);text-align:center">✅ ไม่พบประเภทวัสดุที่มีผู้จำหน่ายรายเดียว</div>';
+
+  // ── Late-Year Surge Table ──
+  document.getElementById('lateYearT').innerHTML=lateYearData.length?`
+    <table class="dtbl"><thead><tr>
+      <th>โรงพยาบาล</th><th style="text-align:right">Q4 (ก.ค.–ก.ย.)</th><th style="text-align:right">เฉลี่ย Q1–Q3</th><th style="text-align:center">อัตราส่วน</th><th style="text-align:center">สถานะ</th>
+    </tr></thead><tbody>${lateYearData.slice(0,12).map(d=>{
+      const rc=d.ratio>2?'var(--rose)':d.ratio>1.5?'var(--amber)':'var(--emerald)';
+      const ic=d.ratio>2?'🔴 Surge':d.ratio>1.5?'🟡 สูง':'🟢 ปกติ';
+      return`<tr>
+        <td title="${d.h}">${d.h.length>22?d.h.slice(0,20)+'…':d.h}</td>
+        <td class="tn" style="text-align:right">฿${fmtB(d.q4)}</td>
+        <td class="tn" style="text-align:right">฿${fmtB(d.avgQ123)}</td>
+        <td class="tn" style="text-align:center;color:${rc}">${d.ratio.toFixed(2)}x</td>
+        <td style="text-align:center"><span style="color:${rc};font-size:.72rem;font-weight:700">${ic}</span></td>
+      </tr>`;
+    }).join('')}</tbody></table>`:noData;
+
+  // ── Monthly Spending Pattern Chart (fiscal year order) ──
+  const FISCAL_LABELS=['ต.ค.','พ.ย.','ธ.ค.','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.'];
+  const FISCAL_IDX=[9,10,11,0,1,2,3,4,5,6,7,8];
+  const fiscalTots=FISCAL_IDX.map(i=>mTots[i]);
+  const barColors=fiscalTots.map(v=>{const z=(v-mMean)/mSD;return z>2?'rgba(240,80,110,.85)':z>1?'rgba(200,168,75,.85)':'rgba(56,189,248,.7)';});
+  mkChart('cSpendPattern','bar',{
+    labels:FISCAL_LABELS,
+    datasets:[
+      {label:'มูลค่ารายเดือน',data:fiscalTots,backgroundColor:barColors,borderRadius:4,order:2},
+      {label:'ค่าเฉลี่ย',data:Array(12).fill(mMean),type:'line',borderColor:'rgba(200,168,75,.7)',borderWidth:1.5,borderDash:[4,3],pointRadius:0,order:1}
+    ]
+  },{
+    plugins:{legend:{labels:{color:'#4a6888',font:{size:9}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': ฿'+fmtB(ctx.raw)}}},
+    scales:{
+      x:{ticks:{color:'#4a6888',font:{size:9}},grid:{color:'rgba(30,53,84,.4)'}},
+      y:{ticks:{color:'#4a6888',font:{size:9},callback:v=>fmtB(v)},grid:{color:'rgba(30,53,84,.4)'}}
     }
   });
-  const medians={};
-  Object.entries(itemGroups).forEach(([item,arr])=>{
-    const s=arr.map(a=>a.up).sort((a,b)=>a-b);
-    const m=Math.floor(s.length/2);
-    medians[item]=s.length%2?s[m]:(s[m-1]+s[m])/2;
-  });
-
-  // ── Red flags (>20% above median) ──
-  const redFlags=[];
-  Object.entries(itemGroups).forEach(([item,arr])=>{
-    const med=medians[item];
-    arr.forEach(a=>{const diff=(a.up-med)/med*100;if(diff>20)redFlags.push({item,hosp:a.hosp,up:a.up,med,diff,val:a.val});});
-  });
-  redFlags.sort((a,b)=>b.diff-a.diff);
-
-  // ── Potential savings ──
-  let savings=0;
-  Object.entries(itemGroups).forEach(([item,arr])=>{
-    const med=medians[item];
-    arr.forEach(a=>{if(a.up>med)savings+=(a.up-med)*a.qty;});
-  });
-
-  const totVal=R.reduce((s,r)=>s+n(r.po_total_total),0)||1;
-  const vendG=groupBy('stock_vendor_name',r=>n(r.po_total_total));
-  const topShare=totVal>0?(vendG[0]?.[1]||0)/totVal*100:0;
-  const completeRows=R.filter(r=>r.stock_vendor_name&&r.item_type_name&&n(r.po_qty_total)>0&&n(r.po_total_total)>0);
-  const sumPct=R.length>0?completeRows.length/R.length*100:0;
-  const perfectRows=R.filter(r=>r.hospitalname&&r.warehouse_name&&r.item_name&&r.item_type_name&&r.stock_vendor_name&&n(r.po_qty_total)>0&&n(r.po_total_total)>0);
-  const perfectPct=R.length>0?perfectRows.length/R.length*100:0;
-
-  // ── KPIs ──
-  document.getElementById('kpiTransp').innerHTML=`
-    <div class="kcard" style="--kc:var(--rose)"><div class="kcard-icon">🚨</div><div class="kcard-label">Red Flags</div><div class="kcard-val">${redFlags.length}</div><div class="kcard-sub">รายการราคาผิดปกติ</div></div>
-    <div class="kcard" style="--kc:var(--emerald)"><div class="kcard-icon">💡</div><div class="kcard-label">ประหยัดได้ (Potential)</div><div class="kcard-val sm">฿${fmtB(savings)}</div><div class="kcard-sub">${(savings/totVal*100).toFixed(1)}% ของมูลค่ารวม</div></div>
-    <div class="kcard" style="--kc:var(--amber)"><div class="kcard-icon">⚠️</div><div class="kcard-label">ความเสี่ยงผู้จำหน่าย</div><div class="kcard-val sm">${topShare.toFixed(1)}%</div><div class="kcard-sub">สัดส่วนรายใหญ่ที่สุด ${topShare>50?'🔴':topShare>30?'🟡':'🟢'}</div></div>
-    <div class="kcard" style="--kc:var(--sky)"><div class="kcard-icon">✅</div><div class="kcard-label">Perfect Order</div><div class="kcard-val sm">${perfectPct.toFixed(1)}%</div><div class="kcard-sub">ข้อมูลครบถ้วน</div></div>
-    <div class="kcard" style="--kc:var(--lavender)"><div class="kcard-icon">📊</div><div class="kcard-label">Spend Under Mgmt</div><div class="kcard-val sm">${sumPct.toFixed(1)}%</div><div class="kcard-sub">ยอดจ่ายที่ตรวจสอบได้</div></div>`;
-
-  // ── Red Flag Table ──
-  document.getElementById('redFlagBody').innerHTML=redFlags.slice(0,25).map(f=>`
-    <tr>
-      <td><span class="rf-badge">🚨 +${f.diff.toFixed(0)}%</span></td>
-      <td title="${f.item}">${f.item.length>32?f.item.slice(0,30)+'…':f.item}</td>
-      <td title="${f.hosp}">${f.hosp.length>22?f.hosp.slice(0,20)+'…':f.hosp}</td>
-      <td class="tn" style="color:var(--rose)">฿${fmtB(f.up)}</td>
-      <td class="tn" style="color:var(--txt2)">฿${fmtB(f.med)}</td>
-      <td class="tn" style="color:var(--gold2)">฿${fmtB(f.val)}</td>
-    </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--emerald)">✅ ไม่พบรายการราคาผิดปกติ</td></tr>`;
-
-  // ── Savings by hospital chart ──
-  const hospSav={};
-  Object.entries(itemGroups).forEach(([item,arr])=>{
-    const med=medians[item];
-    arr.forEach(a=>{if(a.up>med){hospSav[a.hosp]=(hospSav[a.hosp]||0)+(a.up-med)*a.qty;}});
-  });
-  const hSavG=Object.entries(hospSav).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  mkChart('cSavings','bar',{labels:hSavG.map(([k])=>k.slice(0,18)),datasets:[{label:'ประหยัดได้',data:hSavG.map(([,v])=>v),backgroundColor:PAL.map(c=>c+'88'),borderColor:PAL,borderWidth:1,borderRadius:4}]},{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#4a6888',font:{size:9},callback:v=>fmtB(v)},grid:{color:'rgba(30,53,84,.4)'}},y:{ticks:{color:'#4a6888',font:{size:9}},grid:{display:false}}}});
-
-  // ── Vendor concentration ──
-  const vTot=vendG.reduce((s,[,v])=>s+v,0)||1;
-  document.getElementById('vendorConcT').innerHTML=vendG.slice(0,8).map(([k,v],i)=>{
-    const sh=v/vTot*100;const rc=sh>30?'var(--rose)':sh>15?'var(--amber)':'var(--emerald)';
-    return`<div class="var-row"><div class="var-name">${k.slice(0,28)}</div><div class="var-val">฿${fmtB(v)}</div><div class="var-pct" style="background:rgba(0,0,0,.2);color:${rc}">${sh.toFixed(1)}%</div><div class="var-bar-wrap"><div class="var-bar" style="width:${Math.min(sh,100).toFixed(1)}%;background:${rc}"></div></div></div>`;
-  }).join('');
-
-  // ── Hospital SOD / Data Integrity table ──
-  const hospList=groupBy('hospitalname',r=>n(r.po_total_total));
-  document.getElementById('sodBody').innerHTML=hospList.slice(0,15).map(([h,v])=>{
-    const hR=R.filter(r=>r.hospitalname===h);
-    const chk=(fn)=>hR.every(fn);
-    const hasType=chk(r=>r.item_type_name);
-    const hasWare=chk(r=>r.warehouse_name);
-    const hasVend=chk(r=>r.stock_vendor_name);
-    const hasQty=chk(r=>n(r.po_qty_total)>0);
-    const score=[hasType,hasVend,hasWare,hasQty].filter(Boolean).length;
-    const sc=score===4?'var(--emerald)':score>=3?'var(--amber)':'var(--rose)';
-    const sl=score===4?'✅ ผ่าน':score>=3?'⚠️ บางส่วน':'❌ ต้องปรับปรุง';
-    const hRF=redFlags.filter(f=>f.hosp===h).length;
-    const ic=(ok)=>`<span style="color:${ok?'var(--emerald)':'var(--rose)'}">${ok?'✓':'✗'}</span>`;
-    return`<tr><td title="${h}">${h.length>22?h.slice(0,20)+'…':h}</td><td class="tn tot-col">฿${fmtB(v)}</td><td style="text-align:center">${ic(hasType)}</td><td style="text-align:center">${ic(hasWare)}</td><td style="text-align:center">${ic(hasVend)}</td><td style="text-align:center">${ic(hasQty)}</td><td style="text-align:center;color:${hRF>0?'var(--rose)':'var(--txt3)'}">${hRF||'—'}</td><td style="text-align:center"><span style="color:${sc};font-size:.72rem;font-weight:700">${sl}</span></td></tr>`;
-  }).join('');
-
-  // ── Perfect Order gauge ──
-  const mkGauge=(pct,label,sub,color)=>`
-    <div class="gauge-wrap">
-      <div style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:130px;height:130px;">
-        <svg viewBox="0 0 130 130" width="130" height="130" style="position:absolute;inset:0;transform:rotate(-90deg)">
-          <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(30,53,84,.6)" stroke-width="10"/>
-          <circle cx="65" cy="65" r="54" fill="none" stroke="${color}" stroke-width="10"
-            stroke-dasharray="${(2*Math.PI*54).toFixed(2)}" stroke-dashoffset="${(2*Math.PI*54*(1-pct/100)).toFixed(2)}"
-            stroke-linecap="round" style="transition:stroke-dashoffset .8s ease"/>
-        </svg>
-        <div style="text-align:center">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:${color}">${pct.toFixed(1)}%</div>
-        </div>
-      </div>
-      <div style="font-size:.78rem;font-weight:600;color:var(--txt);margin-top:8px">${label}</div>
-      <div style="font-size:.68rem;color:var(--txt3);margin-top:3px">${sub}</div>
-    </div>`;
-
-  const pFields=[
-    ['ชื่อโรงพยาบาล',R.filter(r=>r.hospitalname).length/R.length*100],
-    ['คลังสินค้า',R.filter(r=>r.warehouse_name).length/R.length*100],
-    ['ชื่อวัสดุ',R.filter(r=>r.item_name).length/R.length*100],
-    ['ประเภทวัสดุ',R.filter(r=>r.item_type_name).length/R.length*100],
-    ['ผู้จำหน่าย',R.filter(r=>r.stock_vendor_name).length/R.length*100],
-    ['จำนวน PO',R.filter(r=>n(r.po_qty_total)>0).length/R.length*100],
-    ['มูลค่า PO',R.filter(r=>n(r.po_total_total)>0).length/R.length*100],
-  ];
-  document.getElementById('perfectOrderDetail').innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
-      ${mkGauge(perfectPct,'Perfect Order','ข้อมูลครบทุกฟิลด์',perfectPct>90?'var(--emerald)':perfectPct>70?'var(--amber)':'var(--rose)')}
-      <div style="flex:1;min-width:200px;">
-        ${pFields.map(([lbl,p])=>`
-          <div style="margin-bottom:8px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
-              <span style="font-size:.72rem;color:var(--txt2)">${lbl}</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:${p>95?'var(--emerald)':p>80?'var(--amber)':'var(--rose)'}">${p.toFixed(1)}%</span>
-            </div>
-            <div style="height:4px;background:var(--rim);border-radius:3px;overflow:hidden">
-              <div style="height:100%;width:${p.toFixed(1)}%;background:${p>95?'var(--emerald)':p>80?'var(--amber)':'var(--rose)'};border-radius:3px;transition:width .6s ease"></div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>`;
-
-  document.getElementById('sumDetail').innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
-      ${mkGauge(sumPct,'Spend Under Mgmt','มูลค่าที่มีข้อมูลครบ',sumPct>80?'var(--sky)':sumPct>60?'var(--amber)':'var(--rose)')}
-      <div style="flex:1;min-width:200px;">
-        <div style="font-size:.72rem;color:var(--txt3);margin-bottom:10px;">รายละเอียดการวิเคราะห์</div>
-        ${[
-          ['รายการที่มีข้อมูลครบ',completeRows.length,R.length,'var(--sky)'],
-          ['รายการที่มี Red Flag',redFlags.length,R.length,'var(--rose)'],
-          ['รายการที่ซื้อต่ำกว่าราคากลาง',R.filter(r=>{const qty=n(r.po_qty_total),val=n(r.po_total_total);if(!qty||!val)return false;const up=val/qty;const med=medians[r.item_name];return med&&up<=med;}).length,R.length,'var(--emerald)'],
-          ['จำนวนผู้จำหน่าย',vendG.length,null,'var(--lavender)'],
-        ].map(([lbl,v,tot,c])=>`
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--navy4);border:1px solid var(--rim);border-radius:7px;margin-bottom:6px;">
-            <span style="font-size:.75rem">${lbl}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:${c}">${tot?fmtN(v)+' / '+fmtN(tot):fmtN(v)} ${tot?'('+((v/tot)*100).toFixed(1)+'%)':''}</span>
-          </div>`).join('')}
-      </div>
-    </div>`;
 }
 
 /* ══════════════════ STATUS ══════════════════ */
