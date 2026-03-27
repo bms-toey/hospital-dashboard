@@ -1015,8 +1015,8 @@ function showTab(id){
 }
 
 /* ══════════════════ HELPERS ══════════════════ */
-function getMonthlyTotals(col){return Array.from({length:12},(_,i)=>filtRows.reduce((s,r)=>s+n(r[col+'_'+i+1]),0));}
-function getQtrTotals(col){return QTR_M.map(m=>m.reduce((s,mi)=>s+filtRows.reduce((ss,r)=>ss+n(r[col+'_'+(mi+1)]),0),0));}
+function getMonthlyTotals(col){const pfx=col==='total'?'total_month_':col+'_month_';return Array.from({length:12},(_,i)=>filtRows.reduce((s,r)=>s+n(r[pfx+(i+1)]),0));}
+function getQtrTotals(col){const pfx=col==='total'?'total_month_':col+'_month_';return QTR_M.map(m=>m.reduce((s,mi)=>s+filtRows.reduce((ss,r)=>ss+n(r[pfx+(mi+1)]),0),0));}
 function groupBy(key,valFn){
   const g={};filtRows.forEach(r=>{const k=r[key]||'ไม่ระบุ';g[k]=(g[k]||0)+valFn(r);});
   return Object.entries(g).sort((a,b)=>b[1]-a[1]);
