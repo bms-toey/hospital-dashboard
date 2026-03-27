@@ -108,7 +108,10 @@ body::after {
   font-size:.58rem;font-weight:700;letter-spacing:2px;
   text-transform:uppercase;color:var(--txt3);
   padding:14px 18px 6px;
+  user-select:none;
+  transition:color .2s;
 }
+.sb-section:hover{color:var(--txt2);}
 
 .sb-item {
   display:flex;align-items:center;gap:10px;
@@ -541,30 +544,38 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
     <div class="sb-sub">ระบบควบคุมการจัดซื้อ · ภาพรวมประเทศ</div>
   </div>
 
-  <div class="sb-section">มุมมอง</div>
-  <a class="sb-item active" onclick="showTab('overview')">
-    <span class="icon">🏛️</span> ภาพรวมประเทศ
-  </a>
-  <a class="sb-item" onclick="showTab('monthly')">
-    <span class="icon">📅</span> รายเดือน
-  </a>
-  <a class="sb-item" onclick="showTab('quarterly')">
-    <span class="icon">📆</span> รายไตรมาส
-  </a>
-  <a class="sb-item" onclick="showTab('annual')">
-    <span class="icon">🗓️</span> รายปี
-  </a>
+  <div class="sb-section" onclick="toggleSection('sec-view')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+    <span>มุมมอง</span><span id="sec-view-arrow" style="font-size:.7rem">▾</span>
+  </div>
+  <div id="sec-view">
+    <a class="sb-item active" onclick="showTab('overview')">
+      <span class="icon">🏛️</span> ภาพรวมประเทศ
+    </a>
+    <a class="sb-item" onclick="showTab('monthly')">
+      <span class="icon">📅</span> รายเดือน
+    </a>
+    <a class="sb-item" onclick="showTab('quarterly')">
+      <span class="icon">📆</span> รายไตรมาส
+    </a>
+    <a class="sb-item" onclick="showTab('annual')">
+      <span class="icon">🗓️</span> รายปี
+    </a>
+  </div>
 
-  <div class="sb-section">วิเคราะห์</div>
-  <a class="sb-item" onclick="showTab('deepdive')">
-    <span class="icon">🔬</span> เชิงลึก
-  </a>
-  <a class="sb-item" onclick="showTab('ranking')">
-    <span class="icon">🏆</span> จัดอันดับ
-  </a>
-  <a class="sb-item" onclick="showTab('data')">
-    <span class="icon">📋</span> ข้อมูลดิบ
-  </a>
+  <div class="sb-section" onclick="toggleSection('sec-analyze')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+    <span>วิเคราะห์</span><span id="sec-analyze-arrow" style="font-size:.7rem">▾</span>
+  </div>
+  <div id="sec-analyze">
+    <a class="sb-item" onclick="showTab('deepdive')">
+      <span class="icon">🔬</span> เชิงลึก
+    </a>
+    <a class="sb-item" onclick="showTab('ranking')">
+      <span class="icon">🏆</span> จัดอันดับ
+    </a>
+    <a class="sb-item" onclick="showTab('data')">
+      <span class="icon">📋</span> ข้อมูลดิบ
+    </a>
+  </div>
 
   <div class="sb-live">
     <div class="sb-live-row">
@@ -703,12 +714,10 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
         <span style="font-size:.72rem;color:var(--txt3)">เลือกเดือน:</span>
         <select class="fsel" id="selMonth" onchange="renderMonthly()" style="max-width:120px">
           <option value="all">ทั้งหมด</option>
-          <option value="0">ม.ค.</option><option value="1">ก.พ.</option>
-          <option value="2">มี.ค.</option><option value="3">เม.ย.</option>
-          <option value="4">พ.ค.</option><option value="5">มิ.ย.</option>
-          <option value="6">ก.ค.</option><option value="7">ส.ค.</option>
-          <option value="8">ก.ย.</option><option value="9">ต.ค.</option>
-          <option value="10">พ.ย.</option><option value="11">ธ.ค.</option>
+          <option value="9">ต.ค. (Q1)</option><option value="10">พ.ย. (Q1)</option><option value="11">ธ.ค. (Q1)</option>
+          <option value="0">ม.ค. (Q2)</option><option value="1">ก.พ. (Q2)</option><option value="2">มี.ค. (Q2)</option>
+          <option value="3">เม.ย. (Q3)</option><option value="4">พ.ค. (Q3)</option><option value="5">มิ.ย. (Q3)</option>
+          <option value="6">ก.ค. (Q4)</option><option value="7">ส.ค. (Q4)</option><option value="8">ก.ย. (Q4)</option>
         </select>
         <select class="fsel" id="selMetric" onchange="renderMonthly()" style="max-width:130px">
           <option value="total">มูลค่า (บาท)</option>
@@ -905,8 +914,9 @@ function parseCsvToRows(txt) {
 }
 
 const MONTHS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-const QTRS=['Q1 (ม.ค.-มี.ค.)','Q2 (เม.ย.-มิ.ย.)','Q3 (ก.ค.-ก.ย.)','Q4 (ต.ค.-ธ.ค.)'];
-const QTR_M=[[0,1,2],[3,4,5],[6,7,8],[9,10,11]];
+// ไตรมาสงบประมาณ: Q1=ต.ค.-ธ.ค.2568, Q2=ม.ค.-มี.ค.2569, Q3=เม.ย.-มิ.ย.2569, Q4=ก.ค.-ก.ย.2569
+const QTRS=['Q1 (ต.ค.-ธ.ค. 68)','Q2 (ม.ค.-มี.ค. 69)','Q3 (เม.ย.-มิ.ย. 69)','Q4 (ก.ค.-ก.ย. 69)'];
+const QTR_M=[[9,10,11],[0,1,2],[3,4,5],[6,7,8]];
 const PAL=['#c8a84b','#38bdf8','#10c47e','#f0506e','#8b7cf8','#f59e0b','#0ea8a0','#e2c06a','#3b9eff','#28e07b'];
 
 let allRows=[],filtRows=[];
@@ -967,15 +977,18 @@ const fmtN=v=>v.toLocaleString('th-TH',{maximumFractionDigits:0});
 const pct=(a,b)=>b?((a-b)/b*100).toFixed(1):0;
 
 /* ══════════════════ FILTERS ══════════════════ */
+function fillOpts(id,key,rows,selected){
+  const sel=document.getElementById(id);
+  const opts=[...new Set(rows.map(r=>r[key]||'').filter(Boolean))].sort();
+  sel.innerHTML='<option value="">ทั้งหมด</option>'+opts.map(o=>`<option value="${o}"${o===selected?' selected':''}>${o}</option>`).join('');
+}
+
 function populateFilters(){
-  const fill=(id,key)=>{
-    const sel=document.getElementById(id);const cur=sel.value;
-    const opts=[...new Set(allRows.map(r=>r[key]||'').filter(Boolean))].sort();
-    sel.innerHTML='<option value="">ทั้งหมด</option>'+opts.map(o=>`<option value="${o}">${o}</option>`).join('');
-    if(opts.includes(cur))sel.value=cur;
-  };
-  fill('fHosp','hospitalname');fill('fWare','warehouse_name');
-  fill('fType','item_type_name');fill('fVend','stock_vendor_name');
+  // Initial load: show all options
+  fillOpts('fHosp','hospitalname',allRows,'');
+  fillOpts('fWare','warehouse_name',allRows,'');
+  fillOpts('fType','item_type_name',allRows,'');
+  fillOpts('fVend','stock_vendor_name',allRows,'');
 }
 
 function applyFilters(prevLen=-1){
@@ -984,6 +997,13 @@ function applyFilters(prevLen=-1){
   const ft=document.getElementById('fType').value;
   const fv=document.getElementById('fVend').value;
   filtRows=allRows.filter(r=>(!fh||r.hospitalname===fh)&&(!fw||r.warehouse_name===fw)&&(!ft||r.item_type_name===ft)&&(!fv||r.stock_vendor_name===fv));
+
+  // Cascade: each dropdown shows only options available given the other 3 filters
+  fillOpts('fHosp','hospitalname',allRows.filter(r=>(!fw||r.warehouse_name===fw)&&(!ft||r.item_type_name===ft)&&(!fv||r.stock_vendor_name===fv)),fh);
+  fillOpts('fWare','warehouse_name',allRows.filter(r=>(!fh||r.hospitalname===fh)&&(!ft||r.item_type_name===ft)&&(!fv||r.stock_vendor_name===fv)),fw);
+  fillOpts('fType','item_type_name',allRows.filter(r=>(!fh||r.hospitalname===fh)&&(!fw||r.warehouse_name===fw)&&(!fv||r.stock_vendor_name===fv)),ft);
+  fillOpts('fVend','stock_vendor_name',allRows.filter(r=>(!fh||r.hospitalname===fh)&&(!fw||r.warehouse_name===fw)&&(!ft||r.item_type_name===ft)),fv);
+
   document.getElementById('ftFilt').textContent=filtRows.length.toLocaleString();
   const tot=filtRows.reduce((s,r)=>s+n(r.po_total_total),0);
   document.getElementById('ftTotal').textContent='฿'+fmtB(tot);
@@ -1000,6 +1020,15 @@ function renderActive(){
     case'ranking':renderRanking();break;
     case'data':renderData();break;
   }
+}
+
+/* ══════════════════ SIDEBAR TOGGLE ══════════════════ */
+function toggleSection(id){
+  const el=document.getElementById(id);
+  const arrow=document.getElementById(id+'-arrow');
+  const collapsed=el.style.display==='none';
+  el.style.display=collapsed?'':'none';
+  arrow.textContent=collapsed?'▾':'▸';
 }
 
 /* ══════════════════ TAB SWITCH ══════════════════ */
