@@ -201,7 +201,7 @@ body::after {
   border-radius:6px;color:var(--txt);padding:4px 9px;
   font-size:.75rem;font-family:'Noto Sans Thai',sans-serif;
   outline:none;cursor:pointer;transition:border-color .2s;
-  max-width:160px;
+  max-width:130px;
 }
 .fsel:focus{border-color:var(--gold);}
 .fsel option{background:var(--navy3);}
@@ -627,19 +627,19 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
     </div>
     <div class="tb-filters">
       <div class="fgrp">
-        <span class="flbl">โรงพยาบาล</span>
+        <span class="flbl">รพ.</span>
         <select class="fsel" id="fHosp" onchange="applyFilters()"><option value="">ทั้งหมด</option></select>
       </div>
       <div class="fgrp">
-        <span class="flbl">คลังสินค้า</span>
+        <span class="flbl">คลัง</span>
         <select class="fsel" id="fWare" onchange="applyFilters()"><option value="">ทั้งหมด</option></select>
       </div>
       <div class="fgrp">
-        <span class="flbl">ประเภทวัสดุ</span>
+        <span class="flbl">ประเภท</span>
         <select class="fsel" id="fType" onchange="applyFilters()"><option value="">ทั้งหมด</option></select>
       </div>
       <div class="fgrp">
-        <span class="flbl">ผู้จำหน่าย</span>
+        <span class="flbl">จำหน่าย</span>
         <select class="fsel" id="fVend" onchange="applyFilters()"><option value="">ทั้งหมด</option></select>
       </div>
     </div>
@@ -896,7 +896,7 @@ table.dtbl td{padding:7px 11px;vertical-align:middle;}
           <button class="xbtn" onclick="exportCSV()">⬇ Export CSV</button>
           <button class="xbtn" onclick="fetchNow()">↻ รีเฟรช</button>
         </div>
-        <div class="dtbl-wrap">
+        <div class="dtbl-wrap" style="max-height:calc(100vh - 220px);">
           <table class="dtbl"><thead id="dHead"></thead><tbody id="dBody"></tbody></table>
         </div>
       </div>
@@ -1118,7 +1118,7 @@ function showTab(id){
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   event.currentTarget.classList.add('active');
   const titles={overview:'ภาพรวมประเทศ',monthly:'รายเดือน',quarterly:'รายไตรมาส',annual:'รายปี',deepdive:'วิเคราะห์เชิงลึก',ranking:'จัดอันดับ',data:'ข้อมูลดิบ',transparency:'บริหารความเสี่ยง'};
-  const subs={overview:'National Procurement Overview',monthly:'Monthly Analysis',quarterly:'Quarterly Analysis',annual:'Annual Summary',deepdive:'Deep Dive Analytics',ranking:'Performance Ranking',data:'Raw Data Explorer',transparency:'Procurement Transparency & Anti-Corruption Dashboard'};
+  const subs={overview:'National Procurement Overview',monthly:'Monthly Analysis',quarterly:'Quarterly Analysis',annual:'Annual Summary',deepdive:'Deep Dive Analytics',ranking:'Performance Ranking',data:'Raw Data Explorer',transparency:'Risk Management'};
   document.getElementById('pageTitle').textContent=titles[id]||id;
   document.getElementById('pageSub').textContent=subs[id]||'';
   renderActive();
